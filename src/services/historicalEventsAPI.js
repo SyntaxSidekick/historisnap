@@ -1266,6 +1266,21 @@ const searchLocalEvents = (query) => {
       return true
     }
     
+    // For ancient history queries, be much more strict about keyword matching
+    if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || 
+        queryLower.includes('egypt') || queryLower.includes('egyptian') ||
+        queryLower.includes('ancient') || queryLower.includes('civilization')) {
+      // Only match if we find direct ancient history terms
+      const ancientTerms = ['egypt', 'egyptian', 'pharaoh', 'pharoah', 'ancient', 'civilization', 'dynasty', 'pyramid', 'nile']
+      const eventText = `${titleLower} ${descLower} ${categoriesLower.join(' ')}`
+      const hasAncientTerms = ancientTerms.some(term => eventText.includes(term))
+      
+      if (!hasAncientTerms) {
+        console.log(`🚫 Rejecting non-ancient event for ancient query: ${event.title}`)
+        return false
+      }
+    }
+    
     // Keyword matching for complex queries
     const queryWords = queryLower.split(/\s+/)
     const eventText = `${titleLower} ${descLower} ${categoriesLower.join(' ')}`
@@ -1280,6 +1295,24 @@ const searchLocalEvents = (query) => {
   
   if (matchingEvents.length > 0) {
     console.log(`✅ EXACT MATCHES FOUND: ${matchingEvents.length}`)
+    console.log(`📝 Matches:`, matchingEvents.map(e => e.title))
+    
+    // For ancient history queries, if we don't have actual ancient history matches, skip to contextual fallback
+    if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || 
+        queryLower.includes('egypt') || queryLower.includes('egyptian') ||
+        queryLower.includes('ancient') || queryLower.includes('civilization')) {
+      const ancientTerms = ['egypt', 'egyptian', 'pharaoh', 'pharoah', 'ancient', 'civilization', 'dynasty', 'pyramid', 'nile']
+      const hasRelevantAncientResults = matchingEvents.some(event => {
+        const eventText = `${event.title} ${event.description} ${event.categories.join(' ')}`.toLowerCase()
+        return ancientTerms.some(term => eventText.includes(term))
+      })
+      
+      if (!hasRelevantAncientResults) {
+        console.log(`🏺 No relevant ancient history matches found, using contextual fallback`)
+        return getContextualFallback(queryLower, allLocal)
+      }
+    }
+    
     // Sort by relevance - exact title matches first
     const sorted = matchingEvents.sort((a, b) => {
       const aTitle = a.title.toLowerCase()
