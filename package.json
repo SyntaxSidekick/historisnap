@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://username.github.io/historisnap",
+  "homepage": "https://syntaxsidekick.github.io/historisnap",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
