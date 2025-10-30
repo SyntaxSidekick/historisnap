@@ -1282,7 +1282,15 @@ const searchLocalEvents = (query) => {
   // Enhanced fuzzy matching for partial queries
   const fuzzyMatches = findFuzzyMatches(queryLower, allLocal)
   if (fuzzyMatches.length > 0) {
-    return fuzzyMatches
+    // Check if this is an ancient history query that should use contextual fallback instead
+    if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || 
+        queryLower.includes('egypt') || queryLower.includes('egyptian') ||
+        queryLower.includes('ancient') || queryLower.includes('civilization')) {
+      // Skip fuzzy matches for ancient history - use contextual fallback
+      console.log('Ancient history query detected, skipping fuzzy matches for contextual fallback')
+    } else {
+      return fuzzyMatches
+    }
   }
   
   // If no matches, return a contextual response based on query type
@@ -1361,8 +1369,16 @@ const searchByDateQuery = (queryLower, allLocal) => {
 const findFuzzyMatches = (queryLower, allLocal) => {
   const fuzzyMatches = []
   
-  // Split query into words
-  const queryWords = queryLower.split(/\s+/).filter(word => word.length > 2)
+  // Filter out common words that shouldn't drive matching
+  const commonWords = ['the', 'first', 'last', 'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'and', 'or', 'but', 'a', 'an']
+  const queryWords = queryLower.split(/\s+/).filter(word => 
+    word.length > 2 && !commonWords.includes(word)
+  )
+  
+  // If we have no meaningful words left, don't fuzzy match
+  if (queryWords.length === 0) {
+    return []
+  }
   
   for (const event of allLocal) {
     const eventText = `${event.title} ${event.description} ${event.categories.join(' ')}`.toLowerCase()
@@ -1383,8 +1399,8 @@ const findFuzzyMatches = (queryLower, allLocal) => {
       }
     }
     
-    // If we match at least 30% of the query words
-    if (matchScore >= queryWords.length * 0.3) {
+    // Require a higher threshold - at least 50% of meaningful words must match
+    if (matchScore >= queryWords.length * 0.5) {
       fuzzyMatches.push({
         event,
         score: matchScore / queryWords.length
