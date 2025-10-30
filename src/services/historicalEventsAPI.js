@@ -830,35 +830,51 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
     const enhancedQuery = enhanceSearchQuery(query)
     console.log(`🚀 Enhanced query: "${enhancedQuery}"`)
     
-    // Search Wikipedia for pages related to the enhanced query
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(enhancedQuery)}&limit=5&format=json&origin=*`
+    let searchData = null
+    let searchAttempts = []
     
-    const searchResponse = await fetchWithTimeout(searchUrl)
-    const searchData = await searchResponse.json()
+    // Try multiple search strategies
+    const searchStrategies = [
+      { query: enhancedQuery, description: 'Enhanced query' },
+      { query: query, description: 'Original query' },
+      // Create simplified versions by removing common words
+      { query: query.replace(/\b(the|a|an|first|last|earliest|latest|most|some)\b/gi, '').trim(), description: 'Simplified query' },
+      // Try just the main subject terms
+      { query: extractMainTerms(query), description: 'Main terms only' }
+    ].filter(s => s.query && s.query.length > 0)
     
-    if (!searchData[1] || searchData[1].length === 0) {
-      console.log(`❌ No Wikipedia results for enhanced query, trying original: "${query}"`)
-      // Try original query if enhanced query fails
-      const fallbackUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=3&format=json&origin=*`
-      const fallbackResponse = await fetchWithTimeout(fallbackUrl)
-      const fallbackData = await fallbackResponse.json()
-      
-      if (!fallbackData[1] || fallbackData[1].length === 0) {
-        console.log(`❌ No Wikipedia results for original query either, falling back to local search`)
-        // Fallback to local events search
-        const localResults = searchLocalEventsWithAnalytics(query)
-        setCache(cacheKey, localResults)
+    for (const strategy of searchStrategies) {
+      try {
+        console.log(`🔍 Trying ${strategy.description}: "${strategy.query}"`)
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(strategy.query)}&limit=5&format=json&origin=*`
         
-        // Track analytics
-        searchAnalytics.trackSearch(query, localResults, 'local_fallback')
-        return localResults
+        const searchResponse = await fetchWithTimeout(searchUrl)
+        const currentSearchData = await searchResponse.json()
+        
+        if (currentSearchData[1] && currentSearchData[1].length > 0) {
+          console.log(`✅ Found ${currentSearchData[1].length} results with ${strategy.description}`)
+          searchData = currentSearchData
+          break
+        } else {
+          console.log(`❌ No results with ${strategy.description}`)
+          searchAttempts.push(strategy.description)
+        }
+      } catch (error) {
+        console.error(`Error with ${strategy.description}:`, error)
+        searchAttempts.push(`${strategy.description} (error)`)
       }
+    }
+    
+    if (!searchData || !searchData[1] || searchData[1].length === 0) {
+      console.log(`❌ All Wikipedia search strategies failed. Tried: ${searchAttempts.join(', ')}`)
+      console.log(`🏠 Falling back to local search`)
+      // Fallback to local events search
+      const localResults = searchLocalEventsWithAnalytics(query)
+      setCache(cacheKey, localResults)
       
-      // Use fallback data
-      searchData[1] = fallbackData[1]
-      searchData[3] = fallbackData[3]
-    } else {
-      console.log(`✅ Found ${searchData[1].length} Wikipedia results`)
+      // Track analytics
+      searchAnalytics.trackSearch(query, localResults, 'local_fallback')
+      return localResults
     }
     
     const events = []
@@ -1006,6 +1022,20 @@ const searchLocalEventsWithAnalytics = (query) => {
 }
 
 // Helper function to enhance search queries for better historical event results
+// Helper function to extract main terms from a query
+const extractMainTerms = (query) => {
+  const commonWords = ['the', 'a', 'an', 'first', 'last', 'earliest', 'latest', 'most', 'some', 'who', 'what', 'when', 'where', 'how', 'why', 'is', 'was', 'were', 'are', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'can', 'shall', 'must', 'ought']
+  
+  const words = query.toLowerCase().split(/\s+/)
+  const mainTerms = words.filter(word => 
+    word.length > 2 && 
+    !commonWords.includes(word) &&
+    !/^\d+$/.test(word) // Remove standalone numbers
+  )
+  
+  return mainTerms.join(' ')
+}
+
 const enhanceSearchQuery = (query) => {
   const queryLower = query.toLowerCase().trim()
   
@@ -1036,61 +1066,153 @@ const enhanceSearchQuery = (query) => {
     return 'Berlin Wall fall October 30 1961'
   }
   
-  // Handle ancient Egypt and pharaoh queries
+  // Enhanced ancient Egypt and pharaoh queries with semantic variations
   if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || queryLower.includes('egypt') || queryLower.includes('egyptian')) {
-    if (queryLower.includes('first') || queryLower.includes('earliest')) {
-      return 'Narmer Menes first pharaoh ancient Egypt unification'
+    if (queryLower.includes('first') || queryLower.includes('earliest') || queryLower.includes('original')) {
+      return 'Narmer Menes first pharaoh ancient Egypt unification upper lower dynasty prehistoric predynastic'
     }
-    return `${query} ancient Egypt pharaoh dynasty kingdom`
+    if (queryLower.includes('last') || queryLower.includes('final') || queryLower.includes('end')) {
+      return 'Cleopatra Ptolemy last pharaoh ancient Egypt Roman conquest Augustus Caesar'
+    }
+    if (queryLower.includes('famous') || queryLower.includes('greatest') || queryLower.includes('powerful')) {
+      return 'Ramesses Khufu Hatshepsut Akhenaten Tutankhamun famous pharaohs ancient Egypt'
+    }
+    if (queryLower.includes('pyramid') || queryLower.includes('build') || queryLower.includes('construct')) {
+      return 'Khufu Khafre pyramid Giza ancient Egypt pharaoh builder construction'
+    }
+    return `${query} ancient Egypt pharaoh dynasty kingdom Nile Memphis Thebes`
   }
   
-  // Handle ancient civilizations
+  // Enhanced ancient civilizations with broader terms
   if (queryLower.includes('ancient') || queryLower.includes('mesopotamia') || queryLower.includes('babylon') || queryLower.includes('sumer')) {
-    return `${query} ancient civilization history archaeology empire`
+    if (queryLower.includes('first') || queryLower.includes('earliest')) {
+      return 'Sumer Mesopotamia first civilization Uruk Ur cuneiform writing'
+    }
+    return `${query} ancient civilization history archaeology empire Mesopotamia Babylon Assyria`
   }
   
-  // Handle Roman Empire queries
+  // Enhanced Roman Empire queries with semantic expansion
   if (queryLower.includes('roman') || queryLower.includes('rome') || queryLower.includes('caesar')) {
-    return `${query} Roman Empire emperor republic ancient history`
+    if (queryLower.includes('first') || queryLower.includes('founding') || queryLower.includes('start')) {
+      return 'Romulus founding Rome 753 BCE Roman Kingdom republic empire'
+    }
+    if (queryLower.includes('emperor') || queryLower.includes('ruler')) {
+      return 'Augustus Caesar emperor Roman Empire imperial period'
+    }
+    if (queryLower.includes('fall') || queryLower.includes('end') || queryLower.includes('collapse')) {
+      return 'fall Roman Empire 476 CE Western barbarian invasion decline'
+    }
+    return `${query} Roman Empire emperor republic ancient history legion conquest`
   }
   
-  // Handle Greek history queries
+  // Enhanced Greek history queries
   if (queryLower.includes('greek') || queryLower.includes('greece') || queryLower.includes('athens') || queryLower.includes('sparta')) {
-    return `${query} ancient Greece classical antiquity philosophy democracy`
+    if (queryLower.includes('first') || queryLower.includes('early') || queryLower.includes('ancient')) {
+      return 'Minoan Mycenaean ancient Greece Bronze Age civilization Crete'
+    }
+    if (queryLower.includes('democracy') || queryLower.includes('politics')) {
+      return 'Athens democracy Pericles ancient Greece political system citizenship'
+    }
+    if (queryLower.includes('war') || queryLower.includes('battle') || queryLower.includes('fight')) {
+      return 'Persian Wars Marathon Thermopylae Peloponnesian War ancient Greece'
+    }
+    return `${query} ancient Greece classical antiquity philosophy democracy polis city-state`
   }
   
-  // Handle war-related queries
+  // Enhanced war-related queries with semantic understanding
   if (queryLower.includes('world war') || queryLower.includes('wwii') || queryLower.includes('ww2')) {
-    return `${query} battles events timeline history`
+    if (queryLower.includes('start') || queryLower.includes('begin') || queryLower.includes('first')) {
+      return 'World War 2 begins invasion Poland 1939 Hitler Germany'
+    }
+    if (queryLower.includes('end') || queryLower.includes('finish') || queryLower.includes('victory')) {
+      return 'World War 2 ends VE Day VJ Day 1945 Allied victory'
+    }
+    return `${query} battles events timeline history Nazi Germany Allied forces`
   }
   
-  // Handle space-related queries
+  // Enhanced space-related queries
   if (queryLower.includes('space') || queryLower.includes('moon') || queryLower.includes('apollo')) {
-    return `${query} mission NASA astronaut landing`
+    if (queryLower.includes('first') || queryLower.includes('earliest')) {
+      return 'Sputnik first satellite space exploration 1957 Soviet Union'
+    }
+    if (queryLower.includes('landing') || queryLower.includes('walk')) {
+      return 'Apollo 11 moon landing Neil Armstrong Buzz Aldrin 1969'
+    }
+    return `${query} mission NASA astronaut rocket satellite exploration`
   }
   
-  // Handle civil rights queries
+  // Enhanced civil rights queries
   if (queryLower.includes('civil rights') || queryLower.includes('martin luther king')) {
-    return `${query} movement speech march protest`
+    if (queryLower.includes('speech') || queryLower.includes('dream')) {
+      return 'I Have a Dream speech Martin Luther King March on Washington 1963'
+    }
+    if (queryLower.includes('bus') || queryLower.includes('boycott')) {
+      return 'Montgomery Bus Boycott Rosa Parks civil rights movement 1955'
+    }
+    return `${query} movement speech march protest segregation equality`
   }
   
-  // Handle political figure queries
+  // Enhanced political figure queries
   if (queryLower.includes('kennedy') || queryLower.includes('jfk')) {
-    return `${query} president assassination presidency Cuba Bay of Pigs`
+    if (queryLower.includes('assassination') || queryLower.includes('death') || queryLower.includes('killed')) {
+      return 'JFK assassination John F Kennedy Dallas November 22 1963 Lee Harvey Oswald'
+    }
+    if (queryLower.includes('speech') || queryLower.includes('inaugural')) {
+      return 'JFK inaugural address ask not what your country 1961'
+    }
+    return `${query} president presidency Cuba Bay of Pigs missile crisis`
   }
   
-  // Handle disaster queries
+  // Enhanced disaster queries
   if (queryLower.includes('titanic')) {
-    return `${query} sinking disaster iceberg 1912`
+    return `Titanic sinking disaster iceberg 1912 ship maritime tragedy Atlantic`
   }
   
-  // Handle technology queries
-  if (queryLower.includes('internet') || queryLower.includes('computer')) {
-    return `${query} invention history development ARPANET`
+  // Enhanced technology queries with semantic expansion
+  if (queryLower.includes('internet') || queryLower.includes('computer') || queryLower.includes('web')) {
+    if (queryLower.includes('first') || queryLower.includes('invention') || queryLower.includes('created')) {
+      return 'ARPANET first computer network internet invention 1969 DARPA'
+    }
+    if (queryLower.includes('world wide web') || queryLower.includes('www')) {
+      return 'World Wide Web Tim Berners-Lee invention 1989 internet browser'
+    }
+    return `${query} invention history development ARPANET computer network digital`
   }
   
-  // For general queries, add historical context terms
-  return `${query} historical event history significance`
+  // Enhanced queries for revolutionary events
+  if (queryLower.includes('revolution')) {
+    if (queryLower.includes('american') || queryLower.includes('independence')) {
+      return 'American Revolution independence 1776 Declaration Boston Tea Party'
+    }
+    if (queryLower.includes('french')) {
+      return 'French Revolution 1789 Bastille Marie Antoinette guillotine'
+    }
+    if (queryLower.includes('industrial')) {
+      return 'Industrial Revolution steam engine factory textile manufacturing'
+    }
+    return `${query} uprising rebellion political social change`
+  }
+  
+  // For general queries, add historical context terms with semantic expansion
+  const words = queryLower.split(/\s+/)
+  let expandedTerms = []
+  
+  // Add semantic expansions for common historical terms
+  if (words.some(w => ['king', 'queen', 'ruler', 'monarch'].includes(w))) {
+    expandedTerms.push('monarchy', 'royal', 'crown', 'dynasty', 'reign')
+  }
+  if (words.some(w => ['war', 'battle', 'fight', 'conflict'].includes(w))) {
+    expandedTerms.push('military', 'army', 'soldier', 'victory', 'defeat')
+  }
+  if (words.some(w => ['discovery', 'invention', 'create', 'found'].includes(w))) {
+    expandedTerms.push('innovation', 'breakthrough', 'pioneer', 'develop')
+  }
+  
+  const expandedQuery = expandedTerms.length > 0 
+    ? `${query} ${expandedTerms.join(' ')} historical event history significance`
+    : `${query} historical event history significance`
+    
+  return expandedQuery
 }
 
 // Helper function to filter out generic date pages and keep relevant historical events
@@ -1419,48 +1541,124 @@ const searchByDateQuery = (queryLower, allLocal) => {
 const findFuzzyMatches = (queryLower, allLocal) => {
   const fuzzyMatches = []
   
+  // Enhanced semantic keyword mapping
+  const semanticMappings = {
+    // Ancient history terms
+    'pharaoh': ['pharoah', 'king', 'ruler', 'dynasty', 'egypt', 'egyptian'],
+    'pharoah': ['pharaoh', 'king', 'ruler', 'dynasty', 'egypt', 'egyptian'],
+    'egypt': ['egyptian', 'pharaoh', 'pharoah', 'nile', 'pyramid', 'ancient'],
+    'ancient': ['old', 'early', 'primitive', 'historic', 'antiquity'],
+    
+    // War and conflict terms
+    'war': ['battle', 'conflict', 'fight', 'invasion', 'combat', 'military'],
+    'battle': ['war', 'fight', 'conflict', 'combat', 'engagement'],
+    
+    // Political terms
+    'president': ['leader', 'ruler', 'head', 'chief', 'commander'],
+    'king': ['ruler', 'monarch', 'emperor', 'pharaoh', 'leader'],
+    'queen': ['ruler', 'monarch', 'empress', 'leader'],
+    
+    // Technology terms
+    'computer': ['technology', 'digital', 'electronic', 'machine'],
+    'internet': ['web', 'network', 'online', 'digital'],
+    
+    // Space terms
+    'space': ['cosmic', 'astronaut', 'rocket', 'satellite', 'moon'],
+    'moon': ['lunar', 'space', 'astronaut', 'apollo'],
+    
+    // Time-related terms
+    'first': ['earliest', 'initial', 'original', 'beginning', 'start'],
+    'last': ['final', 'end', 'latest', 'conclusion'],
+    'early': ['first', 'initial', 'beginning', 'ancient', 'primitive'],
+  }
+  
   // Filter out common words that shouldn't drive matching
-  const commonWords = ['the', 'first', 'last', 'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'and', 'or', 'but', 'a', 'an']
+  const commonWords = ['the', 'first', 'last', 'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'and', 'or', 'but', 'a', 'an', 'is', 'was', 'were', 'are', 'be', 'been']
+  
+  // Extract meaningful words and their semantic variations
   const queryWords = queryLower.split(/\s+/).filter(word => 
     word.length > 2 && !commonWords.includes(word)
   )
   
+  // Add semantic variations to the search terms
+  const expandedQueryWords = new Set(queryWords)
+  queryWords.forEach(word => {
+    if (semanticMappings[word]) {
+      semanticMappings[word].forEach(variation => expandedQueryWords.add(variation))
+    }
+  })
+  
+  const allSearchTerms = Array.from(expandedQueryWords)
+  
   // If we have no meaningful words left, don't fuzzy match
-  if (queryWords.length === 0) {
+  if (allSearchTerms.length === 0) {
     return []
   }
+  
+  console.log(`🔍 Fuzzy search with terms: [${queryWords.join(', ')}] + semantic variations: [${allSearchTerms.filter(t => !queryWords.includes(t)).join(', ')}]`)
   
   for (const event of allLocal) {
     const eventText = `${event.title} ${event.description} ${event.categories.join(' ')}`.toLowerCase()
     
-    let matchScore = 0
+    let exactMatchScore = 0
+    let semanticMatchScore = 0
+    let partialMatchScore = 0
+    
+    // Score different types of matches
     for (const word of queryWords) {
       if (eventText.includes(word)) {
-        matchScore++
-      }
-      // Partial word matching for typos
-      else {
-        const partialMatches = eventText.split(/\s+/).filter(eventWord => 
-          eventWord.includes(word) || word.includes(eventWord.substring(0, Math.max(3, eventWord.length - 1)))
-        )
-        if (partialMatches.length > 0) {
-          matchScore += 0.5
-        }
+        exactMatchScore += 2 // Exact matches get highest score
       }
     }
     
-    // Require a higher threshold - at least 50% of meaningful words must match
-    if (matchScore >= queryWords.length * 0.5) {
+    for (const word of allSearchTerms) {
+      if (eventText.includes(word) && !queryWords.includes(word)) {
+        semanticMatchScore += 1 // Semantic matches get medium score
+      }
+    }
+    
+    // Partial word matching for typos and variations
+    for (const word of queryWords) {
+      const partialMatches = eventText.split(/\s+/).filter(eventWord => 
+        (eventWord.length > 3 && word.length > 3) && 
+        (eventWord.includes(word.substring(0, word.length - 1)) || 
+         word.includes(eventWord.substring(0, eventWord.length - 1)))
+      )
+      if (partialMatches.length > 0) {
+        partialMatchScore += 0.5
+      }
+    }
+    
+    const totalScore = exactMatchScore + semanticMatchScore + partialMatchScore
+    const maxPossibleScore = queryWords.length * 2
+    const matchPercentage = totalScore / maxPossibleScore
+    
+    // Require at least 30% match but prioritize exact and semantic matches
+    if (matchPercentage >= 0.3 || exactMatchScore > 0) {
       fuzzyMatches.push({
         event,
-        score: matchScore / queryWords.length
+        score: totalScore,
+        exactMatches: exactMatchScore,
+        semanticMatches: semanticMatchScore,
+        partialMatches: partialMatchScore
       })
     }
   }
   
-  // Sort by score and return top matches
-  fuzzyMatches.sort((a, b) => b.score - a.score)
-  return fuzzyMatches.slice(0, 3).map(match => match.event)
+  // Sort by total score, then by exact matches, then by semantic matches
+  fuzzyMatches.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score
+    if (b.exactMatches !== a.exactMatches) return b.exactMatches - a.exactMatches
+    return b.semanticMatches - a.semanticMatches
+  })
+  
+  const results = fuzzyMatches.slice(0, 5).map(match => match.event)
+  
+  if (results.length > 0) {
+    console.log(`🎯 Fuzzy matches found:`, results.map((r, i) => `${i+1}. ${r.title} (${fuzzyMatches[i].exactMatches}E/${fuzzyMatches[i].semanticMatches}S/${fuzzyMatches[i].partialMatches}P)`))
+  }
+  
+  return results
 }
 
 // Helper function to provide contextual fallbacks
