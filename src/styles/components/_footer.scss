@@ -1,0 +1,178 @@
+// HistoriSnap - Footer Component Styles
+// Google-centric footer with Material Design 3 patterns
+
+@use '../utils/variables' as *;
+@use '../utils/mixins' as *;
+
+.footer {
+  background: var(--md-sys-color-surface);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  padding: $space-12 0;
+  margin-top: auto;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $space-4;
+
+    @include respond-to(sm) {
+      padding: 0 $space-6;
+    }
+
+    @include respond-to(lg) {
+      padding: 0 $space-8;
+    }
+  }
+
+  &__divider {
+    margin-bottom: $space-8;
+    border-color: var(--md-sys-color-outline-variant);
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-8;
+
+    @include respond-to(md) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+
+  &__copyright {
+    text-align: center;
+
+    @include respond-to(md) {
+      text-align: left;
+    }
+
+    &-text {
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: $font-family-base;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.43;
+      margin-bottom: $space-2;
+    }
+
+    &-tech {
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: $font-family-mono;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      justify-content: center;
+
+      @include respond-to(md) {
+        justify-content: flex-start;
+      }
+
+      .icon {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: $space-12;
+    flex-direction: column;
+    align-items: center;
+
+    @include respond-to(sm) {
+      flex-direction: row;
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      text-decoration: none;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 0.75rem;
+      font-family: $font-family-base;
+      transition: color $animation-duration-fast ease;
+
+      &:hover {
+        color: var(--md-sys-color-primary);
+        text-decoration: underline;
+      }
+
+      .icon {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  &__credits {
+    margin-top: $space-8;
+    text-align: center;
+
+    &-text {
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: $font-family-base;
+      font-size: 0.75rem;
+      opacity: 0.7;
+      line-height: 1.5;
+    }
+  }
+
+  &__standards {
+    margin-top: $space-4;
+    text-align: center;
+
+    &-text {
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: $font-family-base;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      line-height: 1.5;
+    }
+  }
+}
+
+// Google-style emphasis elements
+.google-emphasis {
+  background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc04, #34a853);
+  background-size: 400% 400%;
+  animation: googleColors 8s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+@keyframes googleColors {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  .google-emphasis {
+    animation: none;
+    background: var(--md-sys-color-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .footer {
+    border-top: 2px solid var(--md-sys-color-outline);
+    
+    &__links-item {
+      border: 1px solid transparent;
+      
+      &:hover {
+        border-color: var(--md-sys-color-primary);
+      }
+    }
+  }
+}

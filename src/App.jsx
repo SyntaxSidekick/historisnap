@@ -9,6 +9,7 @@ import Header from './components/Header'
 import Controls from './components/Controls'
 import EventDisplay from './components/EventDisplay'
 import RecentEventsIndicator from './components/RecentEventsIndicator'
+import Footer from './components/Footer'
 import { Container } from '@mui/material'
 import { fetchEventsForDate, fetchRandomEvent, getAllLocalEvents, searchHistoricalEvents, searchEventsByCategory, searchTrendingEvents, fetchThisDayInHistory, trackEventClick } from './services/historicalEventsAPI'
 import './styles/main.scss'
@@ -168,9 +169,9 @@ function AppContent() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="app">
+        <div className="app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <Header />
-          <main className="main-container">
+          <main className="main-container" style={{ flex: 1 }}>
             <Controls 
               onGenerateEvent={handleEventGeneration}
               onRandomEvent={handleRandomEvent}
@@ -185,6 +186,7 @@ function AppContent() {
             />
           </main>
           <RecentEventsIndicator />
+          <Footer />
         </div>
       </LocalizationProvider>
     </ThemeProvider>
