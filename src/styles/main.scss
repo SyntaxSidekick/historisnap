@@ -1,0 +1,100 @@
+// HistoriSnap - Main Styles Entry Point
+// Using Material Design 3 with custom Sass organization
+
+// =============================
+// Utils (Variables & Mixins)
+// =============================
+@use 'utils/variables' as *;
+@use 'utils/mixins' as *;
+
+// =============================
+// Base Styles
+// =============================
+@use 'base/reset';
+
+// =============================
+// Component Styles
+// =============================
+@use 'components/header';
+@use 'components/controls';
+@use 'components/event-display';
+
+// =============================
+// Global App Styles
+// =============================
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $space-12 $space-4;
+  width: 100%;
+
+  @include respond-to(sm) {
+    padding: $space-12 $space-6;
+  }
+
+  @include respond-to(lg) {
+    padding: $space-16 $space-8;
+  }
+}
+
+// =============================
+// Loading States & Animations
+// =============================
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity $animation-duration-slow ease;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity $animation-duration-slow ease;
+}
+
+// =============================
+// Accessibility Improvements
+// =============================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .event-card {
+    border: 2px solid $md-outline;
+  }
+
+  .control-button {
+    border: 2px solid $md-primary;
+  }
+}
+
+// Dark mode support (for future implementation)
+@media (prefers-color-scheme: dark) {
+  // Dark mode variables would go here
+  // Currently using Material UI's built-in dark mode support
+}

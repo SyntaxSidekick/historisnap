@@ -1,0 +1,87 @@
+// Controls Component Styles - Google Material Design 3 Style
+@use '../utils/variables' as *;
+@use '../utils/mixins' as *;
+
+// Enhanced search bar focus styles
+.MuiPaper-root {
+  &:has(.MuiTextField-root:focus-within) {
+    box-shadow: 0 8px 24px rgba(25, 118, 210, 0.15) !important;
+    border-color: $md-primary !important;
+  }
+}
+
+// Floating Action Button custom animations
+.MuiFab-root {
+  &:hover {
+    animation: pulse-glow 2s infinite;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(25, 118, 210, 0.6);
+  }
+}
+
+// Enhanced chip hover effects
+.MuiChip-root {
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Date picker modal styling
+.MuiPaper-root:has(.MuiDatePicker-root) {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+// Responsive spacing adjustments
+@include max-width(sm) {
+  .MuiStack-root {
+    &[data-direction="row"] {
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+  }
+  
+  .MuiFab-root {
+    bottom: 16px !important;
+    right: 16px !important;
+    transform: scale(0.9);
+  }
+}
+
+// Custom scrollbar for chip container
+.MuiStack-root:has(.MuiChip-root) {
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $md-outline-variant;
+    border-radius: 2px;
+  }
+}
+
+// Legacy support for any remaining custom controls
+.controls-section {
+  @include material-surface(variant);
+  border-radius: $radius-xl;
+  padding: $space-6;
+  margin-bottom: $space-12;
+  border: 1px solid $md-outline-variant;
+  @include elevation(1);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

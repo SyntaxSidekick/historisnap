@@ -1,0 +1,277 @@
+// Mixins for HistoriSnap
+@use 'variables' as *;
+
+// =============================
+// Responsive Breakpoints
+// =============================
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: #{$breakpoint-xs}) { @content; }
+  }
+  @if $breakpoint == sm {
+    @media (min-width: #{$breakpoint-sm}) { @content; }
+  }
+  @if $breakpoint == md {
+    @media (min-width: #{$breakpoint-md}) { @content; }
+  }
+  @if $breakpoint == lg {
+    @media (min-width: #{$breakpoint-lg}) { @content; }
+  }
+  @if $breakpoint == xl {
+    @media (min-width: #{$breakpoint-xl}) { @content; }
+  }
+  @if $breakpoint == 2xl {
+    @media (min-width: #{$breakpoint-2xl}) { @content; }
+  }
+}
+
+@mixin max-width($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: #{$breakpoint-sm - 1px}) { @content; }
+  }
+  @if $breakpoint == sm {
+    @media (max-width: #{$breakpoint-md - 1px}) { @content; }
+  }
+  @if $breakpoint == md {
+    @media (max-width: #{$breakpoint-lg - 1px}) { @content; }
+  }
+  @if $breakpoint == lg {
+    @media (max-width: #{$breakpoint-xl - 1px}) { @content; }
+  }
+  @if $breakpoint == xl {
+    @media (max-width: #{$breakpoint-2xl - 1px}) { @content; }
+  }
+}
+
+// =============================
+// Material Design Elevation
+// =============================
+
+@mixin elevation($level) {
+  @if $level == 1 {
+    box-shadow: $shadow-sm;
+  }
+  @if $level == 2 {
+    box-shadow: $shadow-md;
+  }
+  @if $level == 3 {
+    box-shadow: $shadow-lg;
+  }
+}
+
+// =============================
+// Material Design Button
+// =============================
+
+@mixin material-button($variant: filled) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-3 $space-6;
+  border-radius: $radius-2xl;
+  font-family: $font-google;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  text-transform: none;
+  cursor: pointer;
+  border: none;
+  transition: all $transition-base;
+  position: relative;
+  overflow: hidden;
+  min-height: 40px;
+
+  @if $variant == filled {
+    background: $md-primary;
+    color: $md-on-primary;
+    @include elevation(1);
+
+    &:hover {
+      background: $md-primary-hover;
+      @include elevation(2);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba($md-primary, 0.12);
+    }
+  }
+
+  @if $variant == outlined {
+    background: transparent;
+    color: $md-primary;
+    border: 1px solid $md-outline;
+
+    &:hover {
+      background: rgba($md-primary, 0.08);
+    }
+
+    &:focus {
+      outline: none;
+      background: rgba($md-primary, 0.12);
+    }
+  }
+
+  @if $variant == text {
+    background: transparent;
+    color: $md-primary;
+
+    &:hover {
+      background: rgba($md-primary, 0.08);
+    }
+
+    &:focus {
+      outline: none;
+      background: rgba($md-primary, 0.12);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// =============================
+// Material Design Card
+// =============================
+
+@mixin material-card($elevation: 1) {
+  background: $md-surface;
+  border-radius: $radius-xl;
+  border: 1px solid $md-outline-variant;
+  overflow: hidden;
+  @include elevation($elevation);
+  transition: box-shadow $transition-base;
+
+  &:hover {
+    @include elevation($elevation + 1);
+  }
+}
+
+// =============================
+// Material Design Surface
+// =============================
+
+@mixin material-surface($variant: default) {
+  @if $variant == default {
+    background: $md-surface;
+    color: $md-on-surface;
+  }
+
+  @if $variant == variant {
+    background: $md-surface-variant;
+    color: $md-on-surface-variant;
+  }
+
+  @if $variant == container {
+    background: $md-surface-container;
+    color: $md-on-surface;
+  }
+}
+
+// =============================
+// Flexbox Utilities
+// =============================
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-column-center {
+  @include flex-column;
+  align-items: center;
+  justify-content: center;
+}
+
+// =============================
+// Typography Utilities
+// =============================
+
+@mixin text-heading($size: lg) {
+  font-family: $font-google;
+  font-weight: $font-weight-medium;
+  
+  @if $size == xs {
+    font-size: $font-size-lg;
+  }
+  @if $size == sm {
+    font-size: $font-size-xl;
+  }
+  @if $size == md {
+    font-size: $font-size-2xl;
+  }
+  @if $size == lg {
+    font-size: $font-size-3xl;
+  }
+  @if $size == xl {
+    font-size: $font-size-4xl;
+  }
+}
+
+@mixin text-body($size: base) {
+  font-family: $font-roboto;
+  font-weight: $font-weight-regular;
+  
+  @if $size == sm {
+    font-size: $font-size-sm;
+  }
+  @if $size == base {
+    font-size: $font-size-base;
+  }
+  @if $size == lg {
+    font-size: $font-size-lg;
+  }
+}
+
+// =============================
+// Animation Utilities
+// =============================
+
+@mixin fade-in($duration: $animation-duration-base) {
+  opacity: 0;
+  animation: fadeIn $duration ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@mixin slide-up($duration: $animation-duration-base) {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp $duration ease-out forwards;
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// =============================
+// Focus States
+// =============================
+
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid $md-primary;
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,60 @@
+// Header Component Styles
+@use '../utils/variables' as *;
+@use '../utils/mixins' as *;
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  width: 100%;
+  @include material-surface(default);
+  border-bottom: 1px solid $md-outline-variant;
+
+  .header-content {
+    @include flex-between;
+    position: relative; // Added for absolute positioning of centered tagline
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $space-6 $space-4;
+    gap: $space-4;
+    width: 100%;
+
+    @include respond-to(sm) {
+      padding: $space-6;
+    }
+
+    @include respond-to(lg) {
+      padding: $space-6 $space-8;
+    }
+
+    // Mobile layout: keep logo and toggle inline
+    @include max-width(sm) {
+      flex-direction: row; // Changed from column to row
+      justify-content: space-between; // Keep items at opposite ends
+      align-items: center;
+      text-align: left; // Changed from center
+      gap: $space-2;
+    }
+  }
+
+  .logo-section {
+    @include flex-center;
+    gap: $space-1;
+
+    .logo-icon {
+      font-size: 32px;
+      // Remove static color - let Material-UI theme handle it
+    }
+
+    .logo-text {
+      @include text-heading(lg);
+      // Remove static color - let Material-UI theme handle it
+    }
+  }
+
+  .tagline {
+    @include text-body(base);
+    // Remove static color - let Material-UI theme handle it
+    // Mobile responsive hiding now handled by Material-UI sx prop
+  }
+}

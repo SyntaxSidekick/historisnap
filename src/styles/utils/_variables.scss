@@ -1,0 +1,143 @@
+// Material Design 3 Variables for HistoriSnap
+
+// =============================
+// Color System
+// =============================
+
+// Primary Colors
+$md-primary: #1a73e8;
+$md-primary-hover: #1557b0;
+$md-on-primary: #ffffff;
+$md-primary-container: #d2e3ff;
+$md-on-primary-container: #001a41;
+
+// Surface Colors
+$md-surface: #ffffff;
+$md-on-surface: #1a1c1e;
+$md-surface-variant: #e1e2ec;
+$md-on-surface-variant: #44474f;
+$md-surface-container: #f8f9fa;
+
+// Outline Colors
+$md-outline: #757780;
+$md-outline-variant: #c5c6d0;
+
+// Secondary Colors
+$md-secondary: #34a853;
+$md-on-secondary: #ffffff;
+
+// Error Colors
+$md-error: #ea4335;
+$md-on-error: #ffffff;
+
+// Legacy Support
+$google-blue: $md-primary;
+$google-blue-hover: $md-primary-hover;
+$white: $md-surface;
+
+// =============================
+// Typography
+// =============================
+
+$font-google: 'Google Sans', 'Roboto', sans-serif;
+$font-roboto: 'Roboto', sans-serif;
+
+// Font Weights
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// Font Sizes
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-size-2xl: 24px;
+$font-size-3xl: 28px;
+$font-size-4xl: 32px;
+
+// =============================
+// Spacing System
+// =============================
+
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+
+// Legacy spacing
+$space-xs: $space-1;
+$space-sm: $space-2;
+$space-md: $space-4;
+$space-lg: $space-6;
+$space-xl: $space-8;
+$space-2xl: $space-12;
+
+// =============================
+// Border Radius
+// =============================
+
+$radius-xs: 2px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-2xl: 20px;
+$radius-3xl: 24px;
+$radius-full: 9999px;
+
+// =============================
+// Shadows
+// =============================
+
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+$shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+// =============================
+// Z-Index
+// =============================
+
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
+
+// =============================
+// Breakpoints
+// =============================
+
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-2xl: 1400px;
+
+// =============================
+// Transitions
+// =============================
+
+$transition-fast: 0.15s ease-in-out;
+$transition-base: 0.2s ease-in-out;
+$transition-slow: 0.3s ease-in-out;
+
+// =============================
+// Animation Durations
+// =============================
+
+$animation-duration-fast: 150ms;
+$animation-duration-base: 200ms;
+$animation-duration-slow: 300ms;
+$animation-duration-slower: 500ms;
