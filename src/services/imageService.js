@@ -3,6 +3,94 @@
 
 // TIER 1: Premium verified images (tested and confirmed working)
 const VERIFIED_IMAGES = {
+  // Ancient Egyptian Civilization
+  'AncientEgypt': [
+    'https://images.unsplash.com/photo-1539650116574-75c0c6d4b4c9?w=800&h=600&fit=crop&auto=format&q=80', // Egyptian pyramids
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Egyptian sphinx
+    'https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800&h=600&fit=crop&auto=format&q=80'  // Egyptian hieroglyphs
+  ],
+  
+  'Pharaoh': [
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Egyptian statue/pharaoh
+    'https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800&h=600&fit=crop&auto=format&q=80', // Egyptian carvings
+    'https://images.unsplash.com/photo-1539650116574-75c0c6d4b4c9?w=800&h=600&fit=crop&auto=format&q=80'  // Egyptian monuments
+  ],
+  
+  'Pyramid': [
+    'https://images.unsplash.com/photo-1539650116574-75c0c6d4b4c9?w=800&h=600&fit=crop&auto=format&q=80', // Pyramids of Giza
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Sphinx and pyramids
+    'https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800&h=600&fit=crop&auto=format&q=80'  // Ancient Egyptian monuments
+  ],
+  
+  'FirstRuler': [
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Ancient ruler statue
+    'https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800&h=600&fit=crop&auto=format&q=80', // Ancient carvings
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80'  // Ancient columns/power
+  ],
+  
+  'Unification': [
+    'https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800&h=600&fit=crop&auto=format&q=80', // Ancient Egyptian unity symbols
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Egyptian monuments
+    'https://images.unsplash.com/photo-1539650116574-75c0c6d4b4c9?w=800&h=600&fit=crop&auto=format&q=80'  // Pyramids representing unity
+  ],
+  
+  // Ancient Mesopotamia
+  'Mesopotamia': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Ancient columns/architecture
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80', // Ancient artifacts
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80'  // Ancient civilization
+  ],
+  
+  'FirstCivilization': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Ancient architecture
+    'https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800&h=600&fit=crop&auto=format&q=80', // Ancient writing/civilization
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80'  // Archaeological artifacts
+  ],
+  
+  'Babylon': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Ancient Babylonian-style architecture
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80', // Ancient artifacts
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80'  // Ancient empire
+  ],
+  
+  // Ancient Greece
+  'AncientGreece': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Greek columns/Parthenon
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80', // Greek artifacts
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80'  // Classical sculptures
+  ],
+  
+  'Democracy': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Democratic columns/government
+    'https://images.unsplash.com/photo-1555848962-6e79363bfa19?w=800&h=600&fit=crop&auto=format&q=80', // Government building
+    'https://images.unsplash.com/photo-1571044880241-95d4c9aa06f5?w=800&h=600&fit=crop&auto=format&q=80'  // Justice/equality
+  ],
+  
+  'Philosophy': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Classical architecture/wisdom
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Ancient thinker statues
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80'  // Ancient learning
+  ],
+  
+  // Ancient Rome
+  'AncientRome': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Roman columns/architecture
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Roman statues/emperors
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80'  // Roman artifacts
+  ],
+  
+  'Emperor': [
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Imperial statues/power
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Imperial architecture
+    'https://images.unsplash.com/photo-1555848962-6e79363bfa19?w=800&h=600&fit=crop&auto=format&q=80'  // Government/power
+  ],
+  
+  'Empire': [
+    'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&auto=format&q=80', // Imperial architecture
+    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&h=600&fit=crop&auto=format&q=80', // Imperial monuments
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&auto=format&q=80'  // Empire artifacts
+  ],
+
   // Specific Historical Events
   'Freedom': [
     'https://images.unsplash.com/photo-1589578228447-e1a4e481c6c8?w=800&h=600&fit=crop&auto=format&q=80', // Freedom/liberation
@@ -207,6 +295,50 @@ const BASE64_FALLBACK_IMAGES = {
 const imageValidationCache = new Map()
 const imageLoadingPromises = new Map()
 
+// Fetch Wikipedia image for an event
+const fetchWikipediaImage = async (title, pageTitle = '') => {
+  try {
+    // Clean the title for search
+    const searchTitle = pageTitle || title.replace(/[^\w\s]/g, '').trim()
+    
+    // Search for Wikipedia page
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(searchTitle)}&limit=1&format=json&origin=*`
+    
+    const searchResponse = await fetch(searchUrl)
+    const searchData = await searchResponse.json()
+    
+    if (searchData[1] && searchData[1][0]) {
+      const pageTitle = searchData[1][0]
+      
+      // Get page images
+      const imageUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=pageimages&format=json&pithumbsize=800&origin=*`
+      
+      const imageResponse = await fetch(imageUrl)
+      const imageData = await imageResponse.json()
+      
+      const pages = imageData.query?.pages
+      if (pages) {
+        const page = Object.values(pages)[0]
+        if (page?.thumbnail?.source) {
+          // Return Wikipedia image directly (they are generally reliable)
+          const imageUrl = page.thumbnail.source
+          
+          // Basic URL validation - ensure it's a proper image URL
+          if (imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) || 
+              imageUrl.includes('upload.wikimedia.org')) {
+            return imageUrl
+          }
+        }
+      }
+    }
+    
+    return null
+  } catch (error) {
+    console.error('Error fetching Wikipedia image:', error)
+    return null
+  }
+}
+
 // Validate if an image URL is working
 const validateImageUrl = async (url, timeout = 5000) => {
   // Check cache first
@@ -266,42 +398,72 @@ const validateImageUrl = async (url, timeout = 5000) => {
 }
 
 // Get verified working image for a category with improved contextual matching
-const getVerifiedImage = async (categories = [], originalUrl = null) => {
+const getVerifiedImage = async (categories = [], originalTitle = null, searchQuery = '') => {
   const allCategories = Array.isArray(categories) ? categories : [categories].filter(Boolean)
   
-  // TIER 1: Try original URL first if provided
-  if (originalUrl) {
+  console.log(`🖼️  Image selection for categories: [${allCategories.join(', ')}], title: "${originalTitle}", query: "${searchQuery}"`)
+  
+  // Enhanced context-aware category priority
+  // Ancient civilizations get highest priority for historical searches
+  const ancientCategories = ['AncientEgypt', 'Pharaoh', 'Pyramid', 'FirstRuler', 'Unification', 'Mesopotamia', 'FirstCivilization', 'Babylon', 'AncientGreece', 'Democracy', 'Philosophy', 'AncientRome', 'Emperor', 'Empire']
+  const specificCategories = ['Freedom', 'Wall', 'ColdWar', 'Moon', 'Achievement', 'WorldWar1', 'WorldWar2', 'CivilRights', 'Tragedy', 'Internet']
+  
+  // Smart prioritization based on search context
+  let prioritizedCategories = []
+  
+  // If it's an ancient history search, prioritize ancient categories
+  if (searchQuery && (searchQuery.includes('ancient') || searchQuery.includes('pharaoh') || searchQuery.includes('egypt') || searchQuery.includes('civilization'))) {
+    prioritizedCategories = [
+      ...allCategories.filter(cat => ancientCategories.includes(cat)),    // Ancient categories first
+      ...allCategories.filter(cat => specificCategories.includes(cat)),   // Specific categories second  
+      ...allCategories.filter(cat => !ancientCategories.includes(cat) && !specificCategories.includes(cat))  // General last
+    ]
+    console.log(`🏺 Ancient history detected, prioritizing ancient imagery`)
+  } else {
+    // Standard prioritization for modern events
+    prioritizedCategories = [
+      ...allCategories.filter(cat => specificCategories.includes(cat)),   // Specific first
+      ...allCategories.filter(cat => ancientCategories.includes(cat)),    // Ancient second
+      ...allCategories.filter(cat => !specificCategories.includes(cat) && !ancientCategories.includes(cat))  // General last
+    ]
+  }
+  
+  console.log(`📋 Category priority order: [${prioritizedCategories.join(', ')}]`)
+  
+  // TIER 1: Try original URL first if provided (but only for Wikipedia/reliable sources)
+  if (originalTitle) {
     try {
-      const isValid = await validateImageUrl(originalUrl, 3000)
-      if (isValid) {
-        return originalUrl
+      // For ancient history, try to get Wikipedia images
+      const wikiImage = await fetchWikipediaImage(originalTitle)
+      if (wikiImage) {
+        const isValid = await validateImageUrl(wikiImage, 3000)
+        if (isValid) {
+          console.log(`✅ Using Wikipedia image for "${originalTitle}"`)
+          return wikiImage
+        }
       }
     } catch (error) {
-      console.log('Original image validation failed:', error)
+      console.log('Wikipedia image fetch failed:', error)
     }
   }
   
-  // TIER 2: Try category-specific verified images with priority order
-  // Priority: Most specific categories first (Freedom, Wall, Moon, etc.) then broader ones
-  const specificCategories = ['Freedom', 'Wall', 'ColdWar', 'Moon', 'Achievement', 'WorldWar1', 'WorldWar2', 'CivilRights', 'Tragedy', 'Internet']
-  const prioritizedCategories = [
-    ...allCategories.filter(cat => specificCategories.includes(cat)), // Specific first
-    ...allCategories.filter(cat => !specificCategories.includes(cat))  // General second
-  ]
-  
+  // TIER 2: Try category-specific verified images with enhanced priority order
   for (const category of prioritizedCategories) {
     const categoryImages = VERIFIED_IMAGES[category]
     if (categoryImages && categoryImages.length > 0) {
+      console.log(`🎯 Trying ${category} category images (${categoryImages.length} available)`)
+      
       // Try multiple images from this category
-      for (const imageUrl of categoryImages) {
+      for (let i = 0; i < categoryImages.length; i++) {
+        const imageUrl = categoryImages[i]
         try {
           const isValid = await validateImageUrl(imageUrl, 2000)
           if (isValid) {
-            console.log(`Using ${category} category image for better contextual match`)
+            console.log(`✅ Using ${category} category image #${i+1} for contextual match`)
             return imageUrl
           }
         } catch (error) {
-          console.log(`Category image ${category} failed:`, error)
+          console.log(`❌ Category image ${category} #${i+1} failed:`, error)
         }
       }
     }

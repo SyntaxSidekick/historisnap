@@ -95,14 +95,15 @@ const processBatch = async (requests, batchSize = API_CONFIG.batchSize) => {
 
 // Helper function to get bulletproof images using the new image service
 // Optimized with request limiting to prevent overwhelming image validation
-const getHistoricalImage = async (categories, originalUrl = null) => {
+// Enhanced getHistoricalImage function with better context matching
+const getHistoricalImage = async (categories, originalTitle = null, searchQuery = '') => {
   try {
     // Add small delay for concurrent requests to prevent overwhelming validation
     if (activeRequests.size > API_CONFIG.imageValidationConcurrency) {
       await new Promise(resolve => setTimeout(resolve, 50))
     }
     
-    return await getVerifiedImage(categories, originalUrl)
+    return await getVerifiedImage(categories, originalTitle, searchQuery)
   } catch (error) {
     console.error('Error getting verified image:', error)
     // Return base64 fallback as last resort
@@ -157,6 +158,63 @@ const fetchWikipediaImage = async (title, pageTitle = '') => {
 // Helper function to categorize events based on text content with improved contextual matching
 const categorizeEvent = (text, title) => {
   const content = (text + ' ' + title).toLowerCase()
+  
+  // SPECIFIC ANCIENT HISTORY MATCHING
+  // Ancient Egypt - Pharaohs and Egyptian civilization
+  if (content.includes('pharaoh') || content.includes('pharoah') || content.includes('egypt') || content.includes('egyptian')) {
+    if (content.includes('narmer') || content.includes('menes') || content.includes('first') || content.includes('unification')) {
+      return ['AncientEgypt', 'Pharaoh', 'FirstRuler', 'Unification']
+    }
+    if (content.includes('pyramid') || content.includes('khufu') || content.includes('giza')) {
+      return ['AncientEgypt', 'Pyramid', 'Monument', 'Architecture']
+    }
+    if (content.includes('cleopatra') || content.includes('ptolemy') || content.includes('last')) {
+      return ['AncientEgypt', 'Pharaoh', 'LastRuler', 'Roman']
+    }
+    if (content.includes('tutankhamun') || content.includes('tomb') || content.includes('treasure')) {
+      return ['AncientEgypt', 'Pharaoh', 'Tomb', 'Archaeology']
+    }
+    return ['AncientEgypt', 'Pharaoh', 'Ancient', 'Civilization']
+  }
+  
+  // Ancient Mesopotamia and Babylon
+  if (content.includes('mesopotamia') || content.includes('babylon') || content.includes('sumer') || content.includes('assyria')) {
+    if (content.includes('first') || content.includes('earliest') || content.includes('civilization')) {
+      return ['Mesopotamia', 'FirstCivilization', 'Ancient', 'Sumer']
+    }
+    if (content.includes('hammurabi') || content.includes('code') || content.includes('law')) {
+      return ['Mesopotamia', 'Law', 'Babylon', 'Code']
+    }
+    return ['Mesopotamia', 'Ancient', 'Civilization', 'Babylon']
+  }
+  
+  // Ancient Greece
+  if (content.includes('ancient greece') || content.includes('athens') || content.includes('sparta') || content.includes('greek')) {
+    if (content.includes('democracy') || content.includes('pericles')) {
+      return ['AncientGreece', 'Democracy', 'Athens', 'Politics']
+    }
+    if (content.includes('alexander') || content.includes('conquest') || content.includes('empire')) {
+      return ['AncientGreece', 'Alexander', 'Empire', 'Conquest']
+    }
+    if (content.includes('philosophy') || content.includes('socrates') || content.includes('plato') || content.includes('aristotle')) {
+      return ['AncientGreece', 'Philosophy', 'Wisdom', 'Thinker']
+    }
+    return ['AncientGreece', 'Classical', 'Ancient', 'Civilization']
+  }
+  
+  // Ancient Rome
+  if (content.includes('ancient rome') || content.includes('roman empire') || content.includes('julius caesar') || content.includes('augustus')) {
+    if (content.includes('founding') || content.includes('romulus') || content.includes('753')) {
+      return ['AncientRome', 'Founding', 'Legend', 'Beginning']
+    }
+    if (content.includes('fall') || content.includes('decline') || content.includes('476')) {
+      return ['AncientRome', 'Fall', 'Decline', 'End']
+    }
+    if (content.includes('caesar') || content.includes('emperor') || content.includes('augustus')) {
+      return ['AncientRome', 'Emperor', 'Leadership', 'Power']
+    }
+    return ['AncientRome', 'Empire', 'Ancient', 'Civilization']
+  }
   
   // SPECIFIC EVENT MATCHING (most contextual)
   // Berlin Wall and Cold War events
@@ -869,7 +927,7 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
       console.log(`❌ All Wikipedia search strategies failed. Tried: ${searchAttempts.join(', ')}`)
       console.log(`🏠 Falling back to local search`)
       // Fallback to local events search
-      const localResults = searchLocalEventsWithAnalytics(query)
+      const localResults = await searchLocalEventsWithAnalytics(query)
       setCache(cacheKey, localResults)
       
       // Track analytics
@@ -921,8 +979,8 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
             
             const categories = categorizeEvent(page.extract, pageTitle)
             
-            // Use bulletproof image system
-            const imageUrl = await getHistoricalImage(categories, pageTitle)
+            // Use bulletproof image system with search context
+            const imageUrl = await getHistoricalImage(categories, pageTitle, query)
             
             return {
               id: `search_${Date.now()}_${i}`,
@@ -965,7 +1023,7 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
     }
     
     // Fallback to local search with analytics
-    const localResults = searchLocalEventsWithAnalytics(query)
+    const localResults = await searchLocalEventsWithAnalytics(query)
     setCache(cacheKey, localResults)
     
     // Track analytics
@@ -974,7 +1032,7 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
     
   } catch (error) {
     console.error('Error searching Wikipedia:', error)
-    const localResults = searchLocalEventsWithAnalytics(query)
+    const localResults = await searchLocalEventsWithAnalytics(query)
     setCache(cacheKey, localResults)
     
     // Track analytics
@@ -1003,8 +1061,8 @@ const applyLearningBoosts = (query, results) => {
 }
 
 // Local search with analytics integration
-const searchLocalEventsWithAnalytics = (query) => {
-  const results = searchLocalEvents(query)
+const searchLocalEventsWithAnalytics = async (query) => {
+  const results = await searchLocalEvents(query)
   
   // Track engagement patterns
   if (results.length > 0) {
@@ -1359,7 +1417,7 @@ const calculateRelevanceScore = (titleLower, queryLower) => {
 }
 
 // Search local events by query
-const searchLocalEvents = (query) => {
+const searchLocalEvents = async (query) => {
   const allLocal = getAllLocalEvents()
   const queryLower = query.toLowerCase().trim()
   
@@ -1431,7 +1489,7 @@ const searchLocalEvents = (query) => {
       
       if (!hasRelevantAncientResults) {
         console.log(`🏺 No relevant ancient history matches found, using contextual fallback`)
-        return getContextualFallback(queryLower, allLocal)
+        return await getContextualFallback(queryLower, allLocal)
       }
     }
     
@@ -1450,7 +1508,7 @@ const searchLocalEvents = (query) => {
   }
   
   // Enhanced fuzzy matching for partial queries
-  const fuzzyMatches = findFuzzyMatches(queryLower, allLocal)
+  const fuzzyMatches = await findFuzzyMatches(queryLower, allLocal)
   if (fuzzyMatches.length > 0) {
     // Check if this is an ancient history query that should use contextual fallback instead
     if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || 
@@ -1466,7 +1524,7 @@ const searchLocalEvents = (query) => {
   
   // If no matches, return a contextual response based on query type
   console.log('📚 USING CONTEXTUAL FALLBACK')
-  return getContextualFallback(queryLower, allLocal)
+  return await getContextualFallback(queryLower, allLocal)
 }
 
 // Helper function to search by date-specific queries
@@ -1538,7 +1596,7 @@ const searchByDateQuery = (queryLower, allLocal) => {
 }
 
 // Helper function for fuzzy matching
-const findFuzzyMatches = (queryLower, allLocal) => {
+const findFuzzyMatches = async (queryLower, allLocal) => {
   const fuzzyMatches = []
   
   // Enhanced semantic keyword mapping
@@ -1662,7 +1720,7 @@ const findFuzzyMatches = (queryLower, allLocal) => {
 }
 
 // Helper function to provide contextual fallbacks
-const getContextualFallback = (queryLower, allLocal) => {
+const getContextualFallback = async (queryLower, allLocal) => {
   // Handle ancient civilization queries
   if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || 
       queryLower.includes('egypt') || queryLower.includes('egyptian') ||
@@ -1677,8 +1735,8 @@ const getContextualFallback = (queryLower, allLocal) => {
       year: -3100,
       month: null,
       day: null,
-      categories: ['Ancient History', 'Egypt', 'Pharaohs', 'Civilization'],
-      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73e0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      categories: ['AncientEgypt', 'Pharaoh', 'FirstRuler', 'Unification'],
+      image: await getHistoricalImage(['AncientEgypt', 'Pharaoh', 'FirstRuler', 'Unification'], 'Narmer', queryLower),
       source: 'Educational Content - No exact Wikipedia match found',
       url: 'https://en.wikipedia.org/wiki/Narmer',
       quickFacts: [
@@ -2367,22 +2425,6 @@ const getSeasonalTrends = (month) => {
 }
 
 // Helper function to explain why something is trending
-const getTrendingReason = (topic, month) => {
-  if (topic.includes(getMonthName(month))) {
-    return 'Current month anniversary'
-  }
-  if (topic.includes('artificial intelligence') || topic.includes('technology')) {
-    return 'AI/Tech relevance'
-  }
-  if (topic.includes('climate') || topic.includes('environment')) {
-    return 'Environmental awareness'
-  }
-  if (topic.includes('democracy') || topic.includes('rights')) {
-    return 'Social relevance'
-  }
-  return 'Popular historical topic'
-}
-
 // Fallback trending events when API fails
 const getTrendingFallbackEvents = () => {
   const allLocal = getAllLocalEvents()

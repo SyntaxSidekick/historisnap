@@ -17,9 +17,10 @@ import './styles/main.scss'
 function AppContent() {
   const { theme } = useTheme()
   const [currentEvent, setCurrentEvent] = useState(() => {
-    // Initialize with MTV event from local data
+    // Initialize with a random event from local data
     const localEvents = getAllLocalEvents()
-    return localEvents.find(event => event.id === 0) || null
+    const randomIndex = Math.floor(Math.random() * localEvents.length)
+    return localEvents[randomIndex] || null
   })
   const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
