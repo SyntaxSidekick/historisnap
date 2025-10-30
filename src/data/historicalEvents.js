@@ -4,7 +4,7 @@ export const historicalEvents = [
     date: "August 1, 1981",
     title: "MTV Launches with 'Video Killed the Radio Star'",
     description: "Music Television (MTV) officially launched at 12:01 AM Eastern Time with the prophetic music video 'Video Killed the Radio Star' by The Buggles. The network revolutionized music consumption and pop culture, creating the era of the music video and launching countless careers.",
-    image: "https://i.ytimg.com/vi/W8r-tXRLazs/maxresdefault.jpg",
+    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop", // Vintage TV with music vibes
     video: {
       youtubeId: "W8r-tXRLazs",
       title: "Video Killed the Radio Star - The Buggles (Original MTV Video)",
@@ -25,7 +25,7 @@ export const historicalEvents = [
     date: "July 20, 1969",
     title: "Apollo 11 Moon Landing",
     description: "Neil Armstrong and Buzz Aldrin became the first humans to walk on the Moon, marking a historic achievement in space exploration. Armstrong's famous words 'That's one small step for man, one giant leap for mankind' were heard by millions worldwide.",
-    image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1608178398319-48f814d0750c?w=800&h=600&fit=crop", // Astronaut on moon surface
     categories: ["Space", "Technology", "Achievement"],
     year: 1969,
     month: 7,
@@ -41,7 +41,7 @@ export const historicalEvents = [
     date: "November 9, 1989",
     title: "Fall of the Berlin Wall",
     description: "The Berlin Wall, which had divided East and West Berlin for 28 years, was finally opened. This event marked the beginning of the end of the Cold War and paved the way for German reunification.",
-    image: "https://images.unsplash.com/photo-1587653915936-5623ea5161c7?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=800&h=600&fit=crop", // Berlin Wall remnants
     categories: ["Politics", "Freedom", "History"],
     year: 1989,
     month: 11,
@@ -57,7 +57,7 @@ export const historicalEvents = [
     date: "September 2, 31 BCE",
     title: "Battle of Actium",
     description: "The naval battle that established Octavian (later Augustus) as the sole ruler of Rome, defeating Mark Antony and Cleopatra. This battle ended the Roman Republic and began the Roman Empire.",
-    image: "https://images.unsplash.com/photo-1594736797933-d0401ba8eaef?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1571847140471-1d7766e8f2a0?w=800&h=600&fit=crop", // Ancient Roman ship/naval battle
     categories: ["Ancient", "War", "Empire"],
     year: -31,
     month: 9,
@@ -73,7 +73,7 @@ export const historicalEvents = [
     date: "December 7, 1941",
     title: "Attack on Pearl Harbor",
     description: "The surprise military strike by the Imperial Japanese Navy against the United States naval base at Pearl Harbor brought the US into World War II. Over 2,400 Americans were killed in the attack.",
-    image: "https://images.unsplash.com/photo-1569163348593-de197250c04e?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=800&h=600&fit=crop", // WWII naval/military scene
     categories: ["War", "Military", "Tragedy"],
     year: 1941,
     month: 12,
@@ -89,7 +89,7 @@ export const historicalEvents = [
     date: "June 23, 1969",
     title: "Stonewall Riots Begin",
     description: "A series of spontaneous demonstrations by members of the LGBTQ+ community began at the Stonewall Inn in New York City. These events are widely considered the catalyst for the modern LGBTQ+ rights movement.",
-    image: "https://images.unsplash.com/photo-1559666126-84f389727b9a?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1559666126-84f389727b9a?w=800&h=600&fit=crop", // Pride/rainbow flag
     categories: ["Rights", "Social", "Movement"],
     year: 1969,
     month: 6,
@@ -105,7 +105,7 @@ export const historicalEvents = [
     date: "March 15, 44 BCE",
     title: "Assassination of Julius Caesar",
     description: "Roman dictator Julius Caesar was assassinated by a group of senators on the Ides of March. This event led to the end of the Roman Republic and the rise of the Roman Empire under Augustus.",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1566473179817-513ad8ed5d20?w=800&h=600&fit=crop", // Roman architecture/columns
     categories: ["Ancient", "Politics", "Assassination"],
     year: -44,
     month: 3,
@@ -121,7 +121,7 @@ export const historicalEvents = [
     date: "October 14, 1066",
     title: "Battle of Hastings",
     description: "William the Conqueror defeated King Harold II of England, marking the Norman Conquest of England. This battle fundamentally changed English culture, language, and governance.",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop", // Medieval castle/armor
     categories: ["Medieval", "War", "Conquest"],
     year: 1066,
     month: 10,
@@ -137,7 +137,7 @@ export const historicalEvents = [
     date: "April 15, 1912",
     title: "Titanic Sinks",
     description: "The RMS Titanic, deemed 'unsinkable,' struck an iceberg and sank on her maiden voyage. Over 1,500 people lost their lives in one of the deadliest peacetime maritime disasters.",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop", // Ship/ocean scene
     categories: ["Disaster", "Maritime", "Tragedy"],
     year: 1912,
     month: 4,
@@ -153,7 +153,7 @@ export const historicalEvents = [
     date: "August 28, 1963",
     title: "March on Washington",
     description: "Over 250,000 people gathered in Washington D.C. for the March on Washington for Jobs and Freedom. Martin Luther King Jr. delivered his famous 'I Have a Dream' speech during this pivotal civil rights demonstration.",
-    image: "https://images.unsplash.com/photo-1573166473017-47ddf2b35c2e?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1565630420967-9f8763eaefbc?w=800&h=600&fit=crop", // Lincoln Memorial/civil rights march
     categories: ["Civil Rights", "Speech", "Movement"],
     year: 1963,
     month: 8,
@@ -169,7 +169,7 @@ export const historicalEvents = [
     date: "December 17, 1903",
     title: "First Powered Flight",
     description: "Orville and Wilbur Wright achieved the first powered, sustained, and controlled heavier-than-air human flight near Kitty Hawk, North Carolina. This 12-second flight changed transportation forever.",
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&h=600&fit=crop", // Early aviation/vintage airplane
     categories: ["Aviation", "Innovation", "Technology"],
     year: 1903,
     month: 12,
@@ -238,7 +238,7 @@ export const historicalEvents = [
     date: "January 15, 2001",
     title: "Wikipedia Launches",
     description: "Wikipedia, the free online encyclopedia that anyone can edit, was launched by Jimmy Wales and Larry Sanger. It revolutionized how people access and share knowledge, becoming one of the most visited websites globally.",
-    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop", // Computer/laptop with knowledge theme
     categories: ["Technology", "Internet", "Knowledge"],
     year: 2001,
     month: 1,
@@ -254,7 +254,7 @@ export const historicalEvents = [
     date: "February 14, 1876",
     title: "Alexander Graham Bell Patents the Telephone",
     description: "Alexander Graham Bell received a patent for his invention of the telephone, revolutionizing communication forever. Just hours later, Elisha Gray filed a similar patent, leading to one of history's most famous patent disputes.",
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1578070181910-f1850e66eb24?w=800&h=600&fit=crop", // Vintage telephone
     categories: ["Technology", "Innovation", "Communication"],
     year: 1876,
     month: 2,
@@ -350,7 +350,7 @@ export const historicalEvents = [
     date: "January 1, 2000",
     title: "Y2K Bug and Millennium Celebration",
     description: "The world celebrated the new millennium while computer systems worldwide were tested for the Y2K bug. Despite widespread fears, major computer failures were minimal, but the event highlighted our dependence on technology.",
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop", // Digital/computer technology
     categories: ["Technology", "Celebration", "Millennium"],
     year: 2000,
     month: 1,
@@ -382,7 +382,7 @@ export const historicalEvents = [
     date: "October 31, 1517",
     title: "Martin Luther Posts 95 Theses",
     description: "Martin Luther posted his 95 Theses on the door of the Castle Church in Wittenberg, challenging the Catholic Church's practice of selling indulgences. This act is traditionally considered the beginning of the Protestant Reformation.",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1548625361-6f83e16ac8fa?w=800&h=600&fit=crop", // Old church/cathedral
     categories: ["Religion", "Reform", "History"],
     year: 1517,
     month: 10,
@@ -430,7 +430,7 @@ export const historicalEvents = [
     date: "August 15, 1947",
     title: "India Independence Day",
     description: "India gained independence from British rule after nearly 200 years of colonial governance. Partition simultaneously created Pakistan, leading to mass migration and religious violence but also the birth of the world's largest democracy.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1554797589-7241bb691973?w=800&h=600&fit=crop", // Indian flag or independence theme
     categories: ["Independence", "Freedom", "Politics", "History"],
     year: 1947,
     month: 8,
