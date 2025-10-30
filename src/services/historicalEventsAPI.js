@@ -1025,6 +1025,29 @@ const enhanceSearchQuery = (query) => {
     return 'Berlin Wall fall October 30 1961'
   }
   
+  // Handle ancient Egypt and pharaoh queries
+  if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || queryLower.includes('egypt') || queryLower.includes('egyptian')) {
+    if (queryLower.includes('first') || queryLower.includes('earliest')) {
+      return 'Narmer Menes first pharaoh ancient Egypt unification'
+    }
+    return `${query} ancient Egypt pharaoh dynasty kingdom`
+  }
+  
+  // Handle ancient civilizations
+  if (queryLower.includes('ancient') || queryLower.includes('mesopotamia') || queryLower.includes('babylon') || queryLower.includes('sumer')) {
+    return `${query} ancient civilization history archaeology empire`
+  }
+  
+  // Handle Roman Empire queries
+  if (queryLower.includes('roman') || queryLower.includes('rome') || queryLower.includes('caesar')) {
+    return `${query} Roman Empire emperor republic ancient history`
+  }
+  
+  // Handle Greek history queries
+  if (queryLower.includes('greek') || queryLower.includes('greece') || queryLower.includes('athens') || queryLower.includes('sparta')) {
+    return `${query} ancient Greece classical antiquity philosophy democracy`
+  }
+  
   // Handle war-related queries
   if (queryLower.includes('world war') || queryLower.includes('wwii') || queryLower.includes('ww2')) {
     return `${query} battles events timeline history`
@@ -1376,6 +1399,32 @@ const findFuzzyMatches = (queryLower, allLocal) => {
 
 // Helper function to provide contextual fallbacks
 const getContextualFallback = (queryLower, allLocal) => {
+  // Handle ancient civilization queries
+  if (queryLower.includes('pharaoh') || queryLower.includes('pharoah') || 
+      queryLower.includes('egypt') || queryLower.includes('egyptian') ||
+      queryLower.includes('ancient') || queryLower.includes('civilization')) {
+    
+    // Return a custom educational message for ancient history queries
+    return [{
+      id: `ancient_fallback_${Date.now()}`,
+      title: 'Ancient Egypt: First Pharaohs',
+      description: 'The first pharaoh of ancient Egypt is traditionally considered to be Narmer (also known as Menes), who unified Upper and Lower Egypt around 3100 BCE. Archaeological evidence suggests the unification process was complex, involving several rulers. The early pharaohs established the foundations of one of history\'s greatest civilizations along the Nile River.',
+      date: 'c. 3100 BCE',
+      year: -3100,
+      month: null,
+      day: null,
+      categories: ['Ancient History', 'Egypt', 'Pharaohs', 'Civilization'],
+      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73e0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      source: 'Educational Content - No exact Wikipedia match found',
+      url: 'https://en.wikipedia.org/wiki/Narmer',
+      quickFacts: [
+        { title: "Search Query", description: queryLower },
+        { title: "Period", description: "Early Dynastic Period" },
+        { title: "Significance", description: "Unification of Egypt" }
+      ]
+    }]
+  }
+  
   // Determine query type and provide relevant fallback
   if (queryLower.includes('war') || queryLower.includes('battle') || queryLower.includes('fight')) {
     const warEvents = allLocal.filter(event => 
@@ -1422,7 +1471,29 @@ const getContextualFallback = (queryLower, allLocal) => {
     }
   }
   
-  // Default fallback
+  // For completely unrelated queries, provide an educational message
+  if (!queryLower.match(/\d{4}|january|february|march|april|may|june|july|august|september|october|november|december/)) {
+    return [{
+      id: `no_results_${Date.now()}`,
+      title: 'Search Not Found',
+      description: `No historical events found matching "${queryLower}". Try searching for specific dates, historical figures, wars, inventions, or major events. Examples: "World War 2", "Moon Landing", "September 11", or "Civil Rights Movement".`,
+      date: 'N/A',
+      year: 'N/A',
+      month: null,
+      day: null,
+      categories: ['Search Help'],
+      image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      source: 'Search Assistance',
+      url: 'https://en.wikipedia.org/wiki/History',
+      quickFacts: [
+        { title: "Search Query", description: queryLower },
+        { title: "Suggestion", description: "Try more specific terms" },
+        { title: "Examples", description: "Dates, people, events" }
+      ]
+    }]
+  }
+  
+  // Default fallback for date-related queries
   const randomEvent = allLocal[Math.floor(Math.random() * allLocal.length)]
   return [{
     ...randomEvent,
