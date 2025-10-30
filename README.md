@@ -13,7 +13,7 @@ A beautiful, Google Material Design-inspired historical events explorer built wi
 
 ## 🚀 Live Demo
 
-Visit the live app: [HistoriSnap on GitHub Pages](https://username.github.io/historisnap)
+Visit the live app: [HistoriSnap on GitHub Pages](https://syntaxsidekick.github.io/historisnap)
 
 ## 🛠️ Tech Stack
 
