@@ -780,6 +780,12 @@ export const fetchRandomEvent = async () => {
 export const searchHistoricalEvents = async (query) => {
   const cacheKey = getCacheKey('search', query)
   
+  // DEBUGGING: Clear cache for pharaoh/egypt queries to test fresh results
+  if (query.toLowerCase().includes('pharaoh') || query.toLowerCase().includes('pharoah') || query.toLowerCase().includes('egypt')) {
+    console.log(`🧹 CLEARING CACHE for ancient history query: "${query}"`)
+    localStorage.removeItem(cacheKey)
+  }
+  
   // Check cache first
   const cached = getCached(cacheKey)
   if (cached) {
@@ -812,7 +818,7 @@ export const searchHistoricalEvents = async (query) => {
 
 const performSearchWithAnalytics = async (query, cacheKey) => {
   try {
-    console.log(`Searching for events related to: "${query}"`)
+    console.log(`🔍 MAIN SEARCH: "${query}"`)
     
     // Get search suggestions based on user's history
     const suggestions = searchAnalytics.getSearchSuggestions(query, 3)
@@ -822,6 +828,7 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
     
     // Enhanced search terms to get more specific historical events
     const enhancedQuery = enhanceSearchQuery(query)
+    console.log(`🚀 Enhanced query: "${enhancedQuery}"`)
     
     // Search Wikipedia for pages related to the enhanced query
     const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(enhancedQuery)}&limit=5&format=json&origin=*`
@@ -830,12 +837,14 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
     const searchData = await searchResponse.json()
     
     if (!searchData[1] || searchData[1].length === 0) {
+      console.log(`❌ No Wikipedia results for enhanced query, trying original: "${query}"`)
       // Try original query if enhanced query fails
       const fallbackUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=3&format=json&origin=*`
       const fallbackResponse = await fetchWithTimeout(fallbackUrl)
       const fallbackData = await fallbackResponse.json()
       
       if (!fallbackData[1] || fallbackData[1].length === 0) {
+        console.log(`❌ No Wikipedia results for original query either, falling back to local search`)
         // Fallback to local events search
         const localResults = searchLocalEventsWithAnalytics(query)
         setCache(cacheKey, localResults)
@@ -848,6 +857,8 @@ const performSearchWithAnalytics = async (query, cacheKey) => {
       // Use fallback data
       searchData[1] = fallbackData[1]
       searchData[3] = fallbackData[3]
+    } else {
+      console.log(`✅ Found ${searchData[1].length} Wikipedia results`)
     }
     
     const events = []
@@ -1230,9 +1241,12 @@ const searchLocalEvents = (query) => {
   const allLocal = getAllLocalEvents()
   const queryLower = query.toLowerCase().trim()
   
+  console.log(`🔍 LOCAL SEARCH: "${queryLower}"`)
+  
   // Enhanced search for date-based queries
   const dateBasedResults = searchByDateQuery(queryLower, allLocal)
   if (dateBasedResults.length > 0) {
+    console.log(`📅 DATE-BASED RESULTS FOUND: ${dateBasedResults.length}`)
     return dateBasedResults
   }
   
@@ -1265,6 +1279,7 @@ const searchLocalEvents = (query) => {
   })
   
   if (matchingEvents.length > 0) {
+    console.log(`✅ EXACT MATCHES FOUND: ${matchingEvents.length}`)
     // Sort by relevance - exact title matches first
     const sorted = matchingEvents.sort((a, b) => {
       const aTitle = a.title.toLowerCase()
@@ -1287,13 +1302,15 @@ const searchLocalEvents = (query) => {
         queryLower.includes('egypt') || queryLower.includes('egyptian') ||
         queryLower.includes('ancient') || queryLower.includes('civilization')) {
       // Skip fuzzy matches for ancient history - use contextual fallback
-      console.log('Ancient history query detected, skipping fuzzy matches for contextual fallback')
+      console.log('🏺 Ancient history query detected, skipping fuzzy matches for contextual fallback')
     } else {
+      console.log(`🎯 FUZZY MATCHES FOUND: ${fuzzyMatches.length}`)
       return fuzzyMatches
     }
   }
   
   // If no matches, return a contextual response based on query type
+  console.log('📚 USING CONTEXTUAL FALLBACK')
   return getContextualFallback(queryLower, allLocal)
 }
 
